@@ -1,1 +1,0 @@
-export const Domains = '0x3BaC0160799cdA0E5A0a2B6416D741D03D530Bbf'
