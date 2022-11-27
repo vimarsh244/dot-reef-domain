@@ -6,6 +6,6 @@ import "hardhat/console.sol";
 
 contract Domains {
   constructor() {
-    console.log("THIS IS MY DOMAINS CONTRACT. NICE.");
+    console.log("hellow from 2077");
   }
 }
