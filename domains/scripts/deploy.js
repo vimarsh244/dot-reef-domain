@@ -14,19 +14,18 @@ const main = async () => {
 
   console.log("Contract deployed to:", domainContract.address);
 
-  // CHANGE THIS DOMAIN TO SOMETHING ELSE! I don't want to see OpenSea full of bananas lol
-  let txn = await domainContract.register("banana", {
-    value: hre.reef.utils.parseEther("10"),
+  let txn = await domainContract.register("sample-domain", {
+    value: hre.reef.utils.parseEther("10"), //10 REEF tokens
   });
   await txn.wait();
-  console.log("Minted domain banana.rf");
+  console.log("Minted domain");
 
-  txn = await domainContract.setRecord("banana", "Am I a banana or a ninja??");
+  txn = await domainContract.setRecord("sample-domain", "ig it works?");
   await txn.wait();
-  console.log("Set record for banana.rf");
+  console.log("Set record for domain");
 
-  const address = await domainContract.getAddress("banana");
-  console.log("Owner of domain banana:", address);
+  const address = await domainContract.getAddress("sample-domain");
+  console.log("Owner of domain:", address);
 
   const balance = await hre.reef.provider.getBalance(domainContract.address);
   console.log("Contract balance:", hre.reef.utils.formatEther(balance));
