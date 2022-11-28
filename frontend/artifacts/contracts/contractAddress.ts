@@ -1,0 +1,1 @@
+export const Domains = '0x0b528946Ed47DE2bF19Ca88B10f1349a782a2e4f'
