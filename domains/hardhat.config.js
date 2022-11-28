@@ -8,6 +8,7 @@ require("@nomicfoundation/hardhat-toolbox");
 
 module.exports = {
   solidity: "0.8.4",
+  defaultNetwork: "reef_testnet",
   networks: {
     // Mainnet reef network configuration
     reef_mainnet: {
