@@ -1,5 +1,6 @@
 ## About
 "Decentralised naming for wallets, websites, & more."
+
 Writing a smart contract for ens like functionality on [reef](https://reef.io/) blockchain. Also add UI to easily mint a .reef domain, set records & ipfs hash to resolve the domain.
 
 ## Structure of project
