@@ -30,4 +30,5 @@ page | designs
 - ability to link multiple accounts & chains to single domain
 
 ## To-Do
+- create a cooloer NFT design that will be shown in the wallet
 - working web-app 😅
