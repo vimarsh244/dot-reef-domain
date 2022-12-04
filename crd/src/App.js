@@ -16,6 +16,7 @@ function App() {
   const [msg, setMsg] = useState("");
   const [signer, setSigner] = useState();
   const [isWalletConnected, setWalletConnected] = useState(false);
+  const [wallet, setWallet] = useState("");
 
   const [secondTab, setSecondTab] = useState("mint");
 
@@ -41,6 +42,8 @@ function App() {
       allAccounts[0] && allAccounts[0].address && setWalletConnected(true);
 
       console.log(allAccounts);
+
+      setWallet(allAccounts[0].address);
 
       const wallet = new Signer(evmProvider, allAccounts[0].address, injected);
 
@@ -71,7 +74,7 @@ function App() {
       FactoryAbi,
       signer
     );
-    const result = await factoryContract.greet();
+    const result = await factoryContract.getRecord();
     setMsg(result);
   };
 
@@ -94,84 +97,115 @@ function App() {
           <Uik.Text text=".reef domains" type="headline" />
         </Uik.Container>
 
-        <Uik.Tabs
-          value={secondTab}
-          onChange={(value) => setSecondTab(value)}
-          options={[
-            { value: "mint", text: "Mint" },
-            { value: "view", text: "View" },
-            { value: "update", text: "Update" },
-            
-            { value: "resolve", text: "Resolve" },
-          ]}
-        />
-
         {isWalletConnected ? (
           <Uik.Container vertical className="container">
-            <Uik.Divider text="Get Message from Contract" />
-            <Uik.Card condensed>
-              <Uik.Container>
+            <Uik.Tabs
+              value={secondTab}
+              onChange={(value) => setSecondTab(value)}
+              options={[
+                { value: "mint", text: "Mint" },
+                { value: "view", text: "View" },
+                { value: "update", text: "Update" },
+
+                { value: "resolve", text: "Resolve" },
+              ]}
+            />
+
+            {secondTab === "mint" ? (
+              <>
+                <Uik.Container>
+                  <Uik.Input
+                    // label="Domain Name"
+                    required
+                    placeholder="domain"
+                    // value={value}
+                    // onInput={(e) => setValue(e.target.value)}
+                  />
+
+                  <Uik.Button text=".reef" disabled />
+                </Uik.Container>
+
                 <Uik.Input
-                  onChange={(e) => setMsgVal(e.target.value)}
-                  value={msgVal}
+                  label="Web IPFS Hash"
+                  required
+                  placeholder="ipfs/hash"
                 />
+                <Uik.Input label="Description" placeholder="Some text ..." />
+                <Uik.Input
+                  label="Spotify Profile"
+                  placeholder="https://open.spotify.com/user/r22wj5ojljff8heui9tgt1scq"
+                />
+              </>
+            ) : (
+              <></>
+            )}
+
+            {secondTab === "view" ? <></> : <></>}
+
+            {secondTab === "update" ? (
+              <>
+                <Uik.Container>
+                  <Uik.Input
+                    // label="Domain Name"
+                    required
+                    placeholder="search for domain"
+                    // value={value}
+                    // onInput={(e) => setValue(e.target.value)}
+                  />
+
+                  <Uik.Button text=".reef" disabled />
+
+                  <Uik.Button text="Get Details" rounded fill size="large" />
+                </Uik.Container>
+
+                <Uik.Input
+                  label="Current Hash : loading..."
+                  required
+                  placeholder="ipfs/hash"
+                />
+                <Uik.Input
+                  label="Currenet Description : loading..."
+                  placeholder="Some text ..."
+                />
+                <Uik.Input
+                  label="Current Spotify Profile"
+                  placeholder="https://open.spotify.com/user/r22wj5ojljff8heui9tgt1scq"
+                />
+
+                {/* <Uik.Button text="Update Domain" neomorph /> */}
+
                 <Uik.Button
-                  onKeyPress={(e) => {
-                    e.key === "Enter" && setGreeting();
-                  }}
-                  onClick={setGreeting}
-                  text="Set message"
-                  className="container-button"
+                  success
+                  neomorph
+                  text="Update Domain"
+                  size="large"
+                  onClick={() => Uik.notify.success("Successfully updated.")}
                 />
-              </Uik.Container>
+              </>
+            ) : (
+              <></>
+            )}
+            {secondTab === "resolve" ? (
+              <>
+              <Uik.Container>
 
+                <Uik.Input placeholder="domain.reef"/>
+                <Uik.Button text='Go'/>
 
-
-            </Uik.Card>
-            <Uik.Divider text="Set Message to Contract" />
-            <Uik.Card condensed>
-              <Uik.Container flow="spaceBetween">
-                <Uik.Text
-                  text={msg.length ? msg : "Nothing on contract yet"}
-                  type={msg.length ? "lead" : "light"}
-                />
-                <Uik.Button
-                  className="container-button"
-                  onClick={getGreeting}
-                  text="Get Message"
-                />
-              </Uik.Container>
-            </Uik.Card>
+                </Uik.Container>
+              </>
+            ) : (
+              <></>
+            )}
+            <></>
           </Uik.Container>
         ) : (
           <>
             <Uik.Container vertical className="container">
               <Uik.Text
                 className="title"
-                text="Create your own 
-				
-				<i>.reef</i> domains"
+                text="Create your own reef domains"
                 type="title"
-              />
-
-
-{/* 
-			<Uik.Text
-                className="title"
-                text="Create your own "
-				type="title"
-				style="uk-text-italic"
-
-			/> */}
-
-
-              <Uik.Text
-                text={
-                  <>
-                    Link your <Uik.Tag>Wallet</Uik.Tag> get started 🚀
-                  </>
-                }
-                type="light"
               />
             </Uik.Container>
             <br />
