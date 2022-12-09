@@ -18,6 +18,11 @@ function App() {
   const [isWalletConnected, setWalletConnected] = useState(false);
   const [wallet, setWallet] = useState("");
 
+  const [domain, setDomain] = useState("");
+  const [desc, setDesc] = useState ("");
+  const [loading, setLoading] = useState(false);
+  const [price, setPrice] = useState("0");
+
   const [secondTab, setSecondTab] = useState("mint");
 
   const checkExtension = async () => {
@@ -26,6 +31,38 @@ function App() {
     if (allInjected.length === 0) {
       return false;
     }
+
+    const factoryContract = new Contract(
+      factoryContractAddress,
+      FactoryAbi,
+      signer
+    );
+
+    // const fetchPrice = useCallback(async () => {
+    //   const price = await factoryContract?.getPrice(domain);
+    //   console.log(price / 10 ** 18);
+
+    //   setPrice(price.toString());
+    // }, [domain]);
+
+    const handleMint = async () => {
+      setLoading(true);
+      try {
+        let tx = await factoryContract?.register(domain, {
+          value: price,
+        });
+        await tx.wait();
+        await factoryContract?.setRecord(domain, desc);
+        await tx.wait();
+        console.log("Successfully Minted: ", tx);
+        setDomain("");
+        setDesc("");
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    };
 
     let injected;
     if (allInjected[0] && allInjected[0].signer) {
@@ -67,15 +104,18 @@ function App() {
     return true;
   };
 
-  const getGreeting = async () => {
+  const fetchPrice = async () => {
     await checkSigner();
     const factoryContract = new Contract(
       factoryContractAddress,
       FactoryAbi,
       signer
     );
-    const result = await factoryContract.getRecord();
-    setMsg(result);
+    const result = await (factoryContract?.getPrice(domain)/ 10 ** 18);
+
+    setPrice(price.toString());
+
+    // setMsg(result);
   };
 
   const setGreeting = async () => {
@@ -87,7 +127,7 @@ function App() {
     );
     await factoryContract.setGreeting(msgVal);
     setMsgVal("");
-    getGreeting();
+    // getGreeting();
   };
 
   return (
@@ -120,6 +160,9 @@ function App() {
                     placeholder="domain"
                     // value={value}
                     // onInput={(e) => setValue(e.target.value)}
+                    onChange={(e) => {
+                      setDomain(e.target.value);
+                    }}
                   />
 
                   <Uik.Button text=".reef" disabled />
@@ -187,11 +230,9 @@ function App() {
             )}
             {secondTab === "resolve" ? (
               <>
-              <Uik.Container>
-
-                <Uik.Input placeholder="domain.reef"/>
-                <Uik.Button text='Go'/>
-
+                <Uik.Container>
+                  <Uik.Input placeholder="domain.reef" />
+                  <Uik.Button text="Go" />
                 </Uik.Container>
               </>
             ) : (
